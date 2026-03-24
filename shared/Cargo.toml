@@ -16,10 +16,7 @@ typegen = ["crux_core/typegen"]
 [dependencies]
 crux_core.workspace = true
 serde = { workspace = true, features = ["derive"] }
-uniffi.workspace = true
+uniffi = { workspace = true, features = ["cli"] }
 
 [build-dependencies]
 uniffi = { workspace = true, features = ["build"] }
-
-[target.uniffi-bindgen.dependencies]
-uniffi = { workspace = true, features = ["cli"] }
