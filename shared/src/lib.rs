@@ -1,14 +1,32 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+// shared/src/lib.rs
+pub mod app;
+
+use std::sync::LazyLock;
+pub use crux_core::{bridge::{Bridge, EffectId}, Core, Request};
+pub use app::*;
+
+#[cfg(not(target_family = "wasm"))]
+uniffi::include_scaffolding!("shared");
+
+static CORE: LazyLock<Bridge<Counter>> = LazyLock::new(|| Bridge::new(Core::new()));
+
+#[must_use]
+pub fn process_event(data: &[u8]) -> Vec<u8> {
+    let mut out = Vec::new();
+    CORE.update(data, &mut out).expect("update failed");
+    out
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[must_use]
+pub fn handle_response(id: u32, data: &[u8]) -> Vec<u8> {
+    let mut out = Vec::new();
+    CORE.resolve(EffectId(id), data, &mut out).expect("resolve failed");
+    out
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+#[must_use]
+pub fn view() -> Vec<u8> {
+    let mut out = Vec::new();
+    CORE.view(&mut out).expect("view failed");
+    out
 }
