@@ -1,5 +1,5 @@
 use crux_core::typegen::TypeGen;
-use shared::Counter;
+use shared::{CruxDemo, ScreenViewModel};
 use std::path::PathBuf;
 
 fn main() -> anyhow::Result<()> {
@@ -7,7 +7,10 @@ fn main() -> anyhow::Result<()> {
 
     let mut gen = TypeGen::new();
 
-    gen.register_app::<Counter>()?;
+    gen.register_app::<CruxDemo>()?;
+    // Required because the reflection library can't automatically find
+    // enum types nested inside other types
+    gen.register_type::<ScreenViewModel>()?;
 
     let output_root = PathBuf::from("./generated");
 
