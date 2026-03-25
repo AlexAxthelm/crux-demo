@@ -8,16 +8,21 @@ struct LibraryView: View {
     var body: some View {
         NavigationStack {
             List(viewModel.feeds, id: \.id) { feed in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(feed.title)
-                            .font(.headline)
-                        Text("\(feed.episode_count) episodes")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                Button {
+                    core.update(.navigateToFeedDetail(feed.id))
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(feed.title)
+                                .font(.headline)
+                                Text("\(feed.episode_count) episodes")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
                     }
-                    Spacer()
                 }
+                .buttonStyle(.plain)
             }
             .navigationTitle("Library")
             .toolbar {

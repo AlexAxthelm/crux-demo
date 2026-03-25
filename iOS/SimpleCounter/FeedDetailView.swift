@@ -25,7 +25,7 @@ struct FeedDetailView: View {
                     Button {
                         core.update(.navigateToLibrary)
                     } label: {
-                        Image(systemName: "gear")
+                        Image(systemName: "home")
                     }
                 }
             }
