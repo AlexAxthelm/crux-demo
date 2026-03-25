@@ -16,6 +16,7 @@
 		ACEED4C684566162EAB9CB48 /* SimpleCounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DCFFA8F642585B6E57DA81 /* SimpleCounterApp.swift */; };
 		C26A1E5DDAB1ED32518E8F2A /* libshared_static.a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a.a */; };
 		D58188307218BFA136B4D659 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A65A9320F7A3AF3A5F129A /* SettingsView.swift */; };
+		E5AA5D3248AF0DD08781EE06 /* FeedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833C393AD96B130BF330828C /* FeedDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -74,6 +75,7 @@
 		19A65A9320F7A3AF3A5F129A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		258EC994D7C693E3141C4563 /* core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = core.swift; sourceTree = "<group>"; };
 		642CF26F4B57B0FF7348C6BF /* SharedTypes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SharedTypes; path = ../shared_types/generated/swift/SharedTypes; sourceTree = SOURCE_ROOT; };
+		833C393AD96B130BF330828C /* FeedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailView.swift; sourceTree = "<group>"; };
 		842F8D01CC76E9BFCDBD2862 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8B8EC4C63F3ECC2B26BBAEC2 /* shared.udl */ = {isa = PBXFileReference; path = shared.udl; sourceTree = "<group>"; };
 		8EA6E09EE87596B896068D0E /* Shared */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Shared; path = ../shared/shared.xcodeproj; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			children = (
 				842F8D01CC76E9BFCDBD2862 /* ContentView.swift */,
 				258EC994D7C693E3141C4563 /* core.swift */,
+				833C393AD96B130BF330828C /* FeedDetailView.swift */,
 				CF5BE0317D54587DCCF48AF4 /* Info.plist */,
 				BCE372A480C0678AFD8770A5 /* LibraryView.swift */,
 				19A65A9320F7A3AF3A5F129A /* SettingsView.swift */,
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				401EA3CBD0D2AD8D475C10AF /* ContentView.swift in Sources */,
+				E5AA5D3248AF0DD08781EE06 /* FeedDetailView.swift in Sources */,
 				68352D64F57E58C922A0B6BD /* LibraryView.swift in Sources */,
 				D58188307218BFA136B4D659 /* SettingsView.swift in Sources */,
 				ACEED4C684566162EAB9CB48 /* SimpleCounterApp.swift in Sources */,

@@ -10,6 +10,8 @@ struct ContentView: View {
             LibraryView(core: core, viewModel: libraryViewModel)
         case .settings:
             SettingsView(core: core)
+        case .feedDetail(let feedDetailViewModel):
+            FeedDetailViewModel(core: core, viewModel: feedDetailViewModel)
         }
     }
 }

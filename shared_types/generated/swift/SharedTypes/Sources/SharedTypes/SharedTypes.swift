@@ -42,9 +42,54 @@ indirect public enum Effect: Hashable {
     }
 }
 
+public struct EpisodeViewModel: Hashable {
+    @Indirect public var id: String
+    @Indirect public var title: String
+    @Indirect public var duration: String
+
+    public init(id: String, title: String, duration: String) {
+        self.id = id
+        self.title = title
+        self.duration = duration
+    }
+
+    public func serialize<S: Serializer>(serializer: S) throws {
+        try serializer.increase_container_depth()
+        try serializer.serialize_str(value: self.id)
+        try serializer.serialize_str(value: self.title)
+        try serializer.serialize_str(value: self.duration)
+        try serializer.decrease_container_depth()
+    }
+
+    public func bincodeSerialize() throws -> [UInt8] {
+        let serializer = BincodeSerializer.init();
+        try self.serialize(serializer: serializer)
+        return serializer.get_bytes()
+    }
+
+    public static func deserialize<D: Deserializer>(deserializer: D) throws -> EpisodeViewModel {
+        try deserializer.increase_container_depth()
+        let id = try deserializer.deserialize_str()
+        let title = try deserializer.deserialize_str()
+        let duration = try deserializer.deserialize_str()
+        try deserializer.decrease_container_depth()
+        return EpisodeViewModel.init(id: id, title: title, duration: duration)
+    }
+
+    public static func bincodeDeserialize(input: [UInt8]) throws -> EpisodeViewModel {
+        let deserializer = BincodeDeserializer.init(input: input);
+        let obj = try deserialize(deserializer: deserializer)
+        if deserializer.get_buffer_offset() < input.count {
+            throw DeserializationError.invalidInput(issue: "Some input bytes were not read")
+        }
+        return obj
+    }
+}
+
 indirect public enum Event: Hashable {
     case navigateToSettings
     case navigateToLibrary
+    case navigateToFeedDetail(String)
 
     public func serialize<S: Serializer>(serializer: S) throws {
         try serializer.increase_container_depth()
@@ -53,6 +98,9 @@ indirect public enum Event: Hashable {
             try serializer.serialize_variant_index(value: 0)
         case .navigateToLibrary:
             try serializer.serialize_variant_index(value: 1)
+        case .navigateToFeedDetail(let x):
+            try serializer.serialize_variant_index(value: 2)
+            try serializer.serialize_str(value: x)
         }
         try serializer.decrease_container_depth()
     }
@@ -73,11 +121,59 @@ indirect public enum Event: Hashable {
         case 1:
             try deserializer.decrease_container_depth()
             return .navigateToLibrary
+        case 2:
+            let x = try deserializer.deserialize_str()
+            try deserializer.decrease_container_depth()
+            return .navigateToFeedDetail(x)
         default: throw DeserializationError.invalidInput(issue: "Unknown variant index for Event: \(index)")
         }
     }
 
     public static func bincodeDeserialize(input: [UInt8]) throws -> Event {
+        let deserializer = BincodeDeserializer.init(input: input);
+        let obj = try deserialize(deserializer: deserializer)
+        if deserializer.get_buffer_offset() < input.count {
+            throw DeserializationError.invalidInput(issue: "Some input bytes were not read")
+        }
+        return obj
+    }
+}
+
+public struct FeedDetailViewModel: Hashable {
+    @Indirect public var id: String
+    @Indirect public var title: String
+    @Indirect public var episodes: [SharedTypes.EpisodeViewModel]
+
+    public init(id: String, title: String, episodes: [SharedTypes.EpisodeViewModel]) {
+        self.id = id
+        self.title = title
+        self.episodes = episodes
+    }
+
+    public func serialize<S: Serializer>(serializer: S) throws {
+        try serializer.increase_container_depth()
+        try serializer.serialize_str(value: self.id)
+        try serializer.serialize_str(value: self.title)
+        try serialize_vector_EpisodeViewModel(value: self.episodes, serializer: serializer)
+        try serializer.decrease_container_depth()
+    }
+
+    public func bincodeSerialize() throws -> [UInt8] {
+        let serializer = BincodeSerializer.init();
+        try self.serialize(serializer: serializer)
+        return serializer.get_bytes()
+    }
+
+    public static func deserialize<D: Deserializer>(deserializer: D) throws -> FeedDetailViewModel {
+        try deserializer.increase_container_depth()
+        let id = try deserializer.deserialize_str()
+        let title = try deserializer.deserialize_str()
+        let episodes = try deserialize_vector_EpisodeViewModel(deserializer: deserializer)
+        try deserializer.decrease_container_depth()
+        return FeedDetailViewModel.init(id: id, title: title, episodes: episodes)
+    }
+
+    public static func bincodeDeserialize(input: [UInt8]) throws -> FeedDetailViewModel {
         let deserializer = BincodeDeserializer.init(input: input);
         let obj = try deserialize(deserializer: deserializer)
         if deserializer.get_buffer_offset() < input.count {
@@ -242,6 +338,7 @@ public struct Request: Hashable {
 indirect public enum ScreenViewModel: Hashable {
     case library(SharedTypes.LibraryViewModel)
     case settings
+    case feedDetail(SharedTypes.FeedDetailViewModel)
 
     public func serialize<S: Serializer>(serializer: S) throws {
         try serializer.increase_container_depth()
@@ -251,6 +348,9 @@ indirect public enum ScreenViewModel: Hashable {
             try x.serialize(serializer: serializer)
         case .settings:
             try serializer.serialize_variant_index(value: 1)
+        case .feedDetail(let x):
+            try serializer.serialize_variant_index(value: 2)
+            try x.serialize(serializer: serializer)
         }
         try serializer.decrease_container_depth()
     }
@@ -272,6 +372,10 @@ indirect public enum ScreenViewModel: Hashable {
         case 1:
             try deserializer.decrease_container_depth()
             return .settings
+        case 2:
+            let x = try SharedTypes.FeedDetailViewModel.deserialize(deserializer: deserializer)
+            try deserializer.decrease_container_depth()
+            return .feedDetail(x)
         default: throw DeserializationError.invalidInput(issue: "Unknown variant index for ScreenViewModel: \(index)")
         }
     }
@@ -320,6 +424,22 @@ public struct ViewModel: Hashable {
         }
         return obj
     }
+}
+
+func serialize_vector_EpisodeViewModel<S: Serializer>(value: [SharedTypes.EpisodeViewModel], serializer: S) throws {
+    try serializer.serialize_len(value: value.count)
+    for item in value {
+        try item.serialize(serializer: serializer)
+    }
+}
+
+func deserialize_vector_EpisodeViewModel<D: Deserializer>(deserializer: D) throws -> [SharedTypes.EpisodeViewModel] {
+    let length = try deserializer.deserialize_len()
+    var obj : [SharedTypes.EpisodeViewModel] = []
+    for _ in 0..<length {
+        obj.append(try SharedTypes.EpisodeViewModel.deserialize(deserializer: deserializer))
+    }
+    return obj
 }
 
 func serialize_vector_FeedViewModel<S: Serializer>(value: [SharedTypes.FeedViewModel], serializer: S) throws {
