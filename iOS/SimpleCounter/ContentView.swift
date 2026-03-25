@@ -11,7 +11,7 @@ struct ContentView: View {
         case .settings:
             SettingsView(core: core)
         case .feedDetail(let feedDetailViewModel):
-            FeedDetailViewModel(core: core, viewModel: feedDetailViewModel)
+            FeedDetailView(core: core, viewModel: feedDetailViewModel)
         }
     }
 }
