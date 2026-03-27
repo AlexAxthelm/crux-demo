@@ -1,10 +1,12 @@
-check: rust-check
+check: rust-all-checks swift-all-checks
 test: rust-test
 lint: rust-lint swift-lint
 format-check: rust-format-check swift-format-check
 format: rust-format swift-format
 
 # -- Rust --
+
+rust-all-checks: rust-check rust-test rust-lint rust-format-check rust-lock-check
 
 rust-check:
 	cargo check
@@ -21,11 +23,16 @@ rust-format:
 rust-format-check:
 	cargo fmt -- --check
 
+rust-lock-check:
+	cargo check --locked
+
 rust-build:
 	cargo build
 
 # -- Swift --
 IOS_SWIFT_DIR   := iOS/SimpleCounter
+
+swift-all-checks: swift-lint swift-format-check
 
 swift-lint:
 	swiftlint lint --strict $(IOS_SWIFT_DIR)
