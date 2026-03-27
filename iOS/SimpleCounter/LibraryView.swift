@@ -1,5 +1,5 @@
-import SwiftUI
 import SharedTypes
+import SwiftUI
 
 struct LibraryView: View {
     @ObservedObject var core: Core
@@ -15,7 +15,7 @@ struct LibraryView: View {
                         VStack(alignment: .leading) {
                             Text(feed.title)
                                 .font(.headline)
-                                Text("\(feed.episode_count) episodes")
+                            Text("\(feed.episode_count) episodes")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }

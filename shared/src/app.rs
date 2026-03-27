@@ -27,7 +27,7 @@ pub enum Screen {
     #[default]
     Library,
     Settings,
-    FeedDetail(String)
+    FeedDetail(String),
 }
 
 pub fn placeholder_feeds() -> Vec<FeedViewModel> {
@@ -52,18 +52,56 @@ pub fn placeholder_feeds() -> Vec<FeedViewModel> {
 
 pub fn placeholder_feed_detail(feed_id: &str) -> FeedDetailViewModel {
     let (title, episodes) = match feed_id {
-        "feed-1" => ("Rustacean Station", vec![
-            EpisodeViewModel { id: "e-1-1".to_string(), title: "Rust 2024 Edition".to_string(), duration: "62 min".to_string() },
-            EpisodeViewModel { id: "e-1-2".to_string(), title: "Async Rust".to_string(), duration: "48 min".to_string() },
-            EpisodeViewModel { id: "e-1-3".to_string(), title: "Building with Crux".to_string(), duration: "55 min".to_string() },
-        ]),
-        "feed-2" => ("The Changelog", vec![
-            EpisodeViewModel { id: "e-2-1".to_string(), title: "Open Source in 2025".to_string(), duration: "71 min".to_string() },
-            EpisodeViewModel { id: "e-2-2".to_string(), title: "The State of Rust".to_string(), duration: "58 min".to_string() },
-            EpisodeViewModel { id: "e-2-3".to_string(), title: "WebAssembly Today".to_string(), duration: "44 min".to_string() },
-            EpisodeViewModel { id: "e-2-4".to_string(), title: "AI and Open Source".to_string(), duration: "66 min".to_string() },
-            EpisodeViewModel { id: "e-2-5".to_string(), title: "Scaling Developer Tools".to_string(), duration: "52 min".to_string() },
-        ]),
+        "feed-1" => (
+            "Rustacean Station",
+            vec![
+                EpisodeViewModel {
+                    id: "e-1-1".to_string(),
+                    title: "Rust 2024 Edition".to_string(),
+                    duration: "62 min".to_string(),
+                },
+                EpisodeViewModel {
+                    id: "e-1-2".to_string(),
+                    title: "Async Rust".to_string(),
+                    duration: "48 min".to_string(),
+                },
+                EpisodeViewModel {
+                    id: "e-1-3".to_string(),
+                    title: "Building with Crux".to_string(),
+                    duration: "55 min".to_string(),
+                },
+            ],
+        ),
+        "feed-2" => (
+            "The Changelog",
+            vec![
+                EpisodeViewModel {
+                    id: "e-2-1".to_string(),
+                    title: "Open Source in 2025".to_string(),
+                    duration: "71 min".to_string(),
+                },
+                EpisodeViewModel {
+                    id: "e-2-2".to_string(),
+                    title: "The State of Rust".to_string(),
+                    duration: "58 min".to_string(),
+                },
+                EpisodeViewModel {
+                    id: "e-2-3".to_string(),
+                    title: "WebAssembly Today".to_string(),
+                    duration: "44 min".to_string(),
+                },
+                EpisodeViewModel {
+                    id: "e-2-4".to_string(),
+                    title: "AI and Open Source".to_string(),
+                    duration: "66 min".to_string(),
+                },
+                EpisodeViewModel {
+                    id: "e-2-5".to_string(),
+                    title: "Scaling Developer Tools".to_string(),
+                    duration: "52 min".to_string(),
+                },
+            ],
+        ),
         _ => ("Unknown Feed", vec![]),
     };
 
@@ -152,7 +190,9 @@ impl App for CruxDemo {
                 feeds: placeholder_feeds(),
             }),
             Screen::Settings => ScreenViewModel::Settings,
-            Screen::FeedDetail(feed_id) => ScreenViewModel::FeedDetail(placeholder_feed_detail(feed_id))
+            Screen::FeedDetail(feed_id) => {
+                ScreenViewModel::FeedDetail(placeholder_feed_detail(feed_id))
+            }
         };
 
         ViewModel { current_screen }

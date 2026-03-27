@@ -9,7 +9,7 @@ class Core: ObservableObject {
         guard let viewBytes = try? ViewModel.bincodeDeserialize(input: [UInt8](SimpleCounter.view())) else {
             fatalError("Failed to deserialize initial ViewModel from core")
         }
-        self.view = viewBytes
+        view = viewBytes
     }
 
     func update(_ event: Event) {

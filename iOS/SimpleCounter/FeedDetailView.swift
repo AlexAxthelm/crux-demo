@@ -1,5 +1,5 @@
-import SwiftUI
 import SharedTypes
+import SwiftUI
 
 struct FeedDetailView: View {
     @ObservedObject var core: Core
