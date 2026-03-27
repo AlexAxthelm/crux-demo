@@ -39,6 +39,7 @@ swift-format-check:
 # -- iOS --
 XCODE_PROJECT   := iOS/SimpleCounter.xcodeproj
 XCODE_SCHEME    := SimpleCounter
+
 SIM_DEVICE_NAME := iPhone 14 Pro Max
 SIM_ID := $(shell \
 	xcrun simctl list devices available -j \
@@ -62,12 +63,14 @@ ios-build: rust-build xcodegen
 		-destination 'platform=iOS Simulator,id=$(SIM_ID)' \
 		| xcpretty
 
-APP_PATH := $(shell find ~/Library/Developer/Xcode/DerivedData -name "$(XCODE_SCHEME).app" \
-	-path "*/Debug-iphonesimulator/*" 2>/dev/null | head -1)
-
 ios-sim: ios-build
+	$(eval APP_PATH := $(shell find ~/Library/Developer/Xcode/DerivedData \
+		-name "$(XCODE_SCHEME).app" \
+		-path "*/Debug-iphonesimulator/*" \
+		-not -path "*/Index.noindex/*" \
+		2>/dev/null | head -1))
 	@[ -n "$(APP_PATH)" ] || \
-		{ echo "App not found in DerivedData. Run ios-build first."; exit 1; }
+		{ echo "App not found in DerivedData."; exit 1; }
 	@[ -n "$(SIM_ID)" ] || \
 		{ echo "Simulator '$(SIM_DEVICE_NAME)' not found."; exit 1; }
 	@echo "Targeting: $(SIM_DEVICE_NAME) ($(SIM_ID))"
@@ -77,3 +80,8 @@ ios-sim: ios-build
 	xcrun simctl install $(SIM_ID) "$(APP_PATH)"
 	xcrun simctl launch --console $(SIM_ID) \
 		$$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$(APP_PATH)/Info.plist")
+
+.PHONY: check test lint format format-check \
+        rust-check rust-test rust-lint rust-format rust-format-check rust-build \
+        swift-lint swift-format swift-format-check \
+        ios-open xcodegen ios-build ios-sim
