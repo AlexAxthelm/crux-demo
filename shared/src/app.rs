@@ -152,7 +152,7 @@ impl App for CruxDemo {
                 feeds: placeholder_feeds(),
             }),
             Screen::Settings => ScreenViewModel::Settings,
-            Screen::FeedDetail(feed_id) => ScreenViewModel::FeedDetail(placeholder_feed_detail(&feed_id))
+            Screen::FeedDetail(feed_id) => ScreenViewModel::FeedDetail(placeholder_feed_detail(feed_id))
         };
 
         ViewModel { current_screen }
