@@ -60,17 +60,20 @@ ios-build: rust-build xcodegen
 		-scheme $(XCODE_SCHEME) \
 		-configuration Debug \
 		-destination 'platform=iOS Simulator,id=$(SIM_ID)' \
-		-derivedDataPath build/ios \
 		| xcpretty
 
+APP_PATH := $(shell find ~/Library/Developer/Xcode/DerivedData -name "$(XCODE_SCHEME).app" \
+	-path "*/Debug-iphonesimulator/*" 2>/dev/null | head -1)
+
 ios-sim: ios-build
+	@[ -n "$(APP_PATH)" ] || \
+		{ echo "App not found in DerivedData. Run ios-build first."; exit 1; }
 	@[ -n "$(SIM_ID)" ] || \
-		{ echo "Simulator '$(SIM_DEVICE_NAME)' not found. Check SIM_DEVICE_NAME."; exit 1; }
-	@echo "Targeting simulator: $(SIM_DEVICE_NAME) ($(SIM_ID))"
+		{ echo "Simulator '$(SIM_DEVICE_NAME)' not found."; exit 1; }
+	@echo "Targeting: $(SIM_DEVICE_NAME) ($(SIM_ID))"
+	@echo "Installing: $(APP_PATH)"
 	xcrun simctl boot $(SIM_ID) 2>/dev/null || true
 	open -a Simulator
-	xcrun simctl install $(SIM_ID) \
-		build/ios/Build/Products/Debug-iphonesimulator/$(XCODE_SCHEME).app
+	xcrun simctl install $(SIM_ID) "$(APP_PATH)"
 	xcrun simctl launch --console $(SIM_ID) \
-		$(shell /usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" \
-			build/ios/Build/Products/Debug-iphonesimulator/$(XCODE_SCHEME).app/Info.plist)
+		$$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$(APP_PATH)/Info.plist")
