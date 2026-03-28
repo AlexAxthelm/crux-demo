@@ -4,6 +4,8 @@ lint: rust-lint swift-lint
 format-check: rust-format-check swift-format-check
 format: rust-format swift-format
 
+clean: rust-clean swift-clean
+
 # -- Rust --
 
 rust-all-checks: rust-check rust-test rust-lint rust-format-check rust-lock-check
@@ -28,6 +30,9 @@ rust-lock-check:
 
 rust-build:
 	cargo build
+
+rust-clean:
+	cargo clean
 
 # -- Swift --
 IOS_SWIFT_DIR   := iOS/SimpleCounter
@@ -87,6 +92,15 @@ ios-sim: ios-build
 	xcrun simctl install $(SIM_ID) "$(APP_PATH)"
 	xcrun simctl launch --console $(SIM_ID) \
 		$$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$(APP_PATH)/Info.plist")
+
+swift-clean: xcode-clean swift-generated-clean
+
+xcode-clean:
+	rm -rf $(XCODE_PROJECT)
+
+swift-generated-clean:
+	rm -rf iOS/generated
+	rm -rf shared_types/generated/swift
 
 .PHONY: check test lint format format-check \
         rust-check rust-test rust-lint rust-format rust-format-check rust-build \
