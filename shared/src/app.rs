@@ -1,4 +1,9 @@
-use crux_core::App;
+use crux_core::{
+    macros::effect,
+    render::{render, RenderOperation},
+    App, Command,
+};
+use serde::{Deserialize, Serialize};
 
 #[derive(Default)]
 pub struct Counter;
@@ -43,14 +48,8 @@ pub struct ViewModel {
     pub count: String,
 }
 
-use crux_core::macros::effect;
-use crux_core::render::RenderOperation;
-
 #[effect(typegen)]
 #[derive(Debug)]
 pub enum Effect {
     Render(RenderOperation),
 }
-
-
-
