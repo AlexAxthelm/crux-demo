@@ -7,16 +7,13 @@ rust-version.workspace = true
 version.workspace = true
 
 [lib]
-crate-type = ["lib", "staticlib", "cdylib"]
+crate-type = [
+  "cdylib",
+  "lib",
+  "staticlib",
+]
 name = "shared"
-
-[features]
-typegen = ["crux_core/typegen"]
 
 [dependencies]
 crux_core.workspace = true
 serde = { workspace = true, features = ["derive"] }
-uniffi = { workspace = true, features = ["cli"] }
-
-[build-dependencies]
-uniffi = { workspace = true, features = ["build"] }
