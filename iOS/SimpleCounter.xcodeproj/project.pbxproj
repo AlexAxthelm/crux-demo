@@ -8,15 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1989BD3C863A9FB37C889B6D /* SharedTypes in Frameworks */ = {isa = PBXBuildFile; productRef = ADFA4530638891CDAA6FCC5D /* SharedTypes */; };
-		2AD69AC61D674BB2BC300FC2 /* (null) in Resources */ = {isa = PBXBuildFile; fileRef = E75E53B837C6A0E03FDCEC5A; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2AD69AC61D674BB2BC300FC2 /* uniffi-bindgen in Resources */ = {isa = PBXBuildFile; fileRef = E75E53B837C6A0E03FDCEC5A /* uniffi-bindgen */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		401EA3CBD0D2AD8D475C10AF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842F8D01CC76E9BFCDBD2862 /* ContentView.swift */; };
-		68352D64F57E58C922A0B6BD /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE372A480C0678AFD8770A5 /* LibraryView.swift */; };
 		94DCD6C97BBC86B89673CA0E /* core.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258EC994D7C693E3141C4563 /* core.swift */; };
 		A022BC4B1B16254762ED55B3 /* shared.udl in Sources */ = {isa = PBXBuildFile; fileRef = 8B8EC4C63F3ECC2B26BBAEC2 /* shared.udl */; };
 		ACEED4C684566162EAB9CB48 /* SimpleCounterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DCFFA8F642585B6E57DA81 /* SimpleCounterApp.swift */; };
-		C26A1E5DDAB1ED32518E8F2A /* libshared_static.a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a.a */; };
-		D58188307218BFA136B4D659 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A65A9320F7A3AF3A5F129A /* SettingsView.swift */; };
-		E5AA5D3248AF0DD08781EE06 /* FeedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833C393AD96B130BF330828C /* FeedDetailView.swift */; };
+		C26A1E5DDAB1ED32518E8F2A /* libshared_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -25,6 +22,8 @@
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.udl";
 			fileType = pattern.proxy;
+			inputFiles = (
+			);
 			isEditable = 1;
 			name = "Generate FFI";
 			outputFiles = (
@@ -71,15 +70,12 @@
 
 /* Begin PBXFileReference section */
 		02DCFFA8F642585B6E57DA81 /* SimpleCounterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCounterApp.swift; sourceTree = "<group>"; };
-		1974E5BC3D6D22A1D5676B40 /* SimpleCounter.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SimpleCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		19A65A9320F7A3AF3A5F129A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1974E5BC3D6D22A1D5676B40 /* SimpleCounter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleCounter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		258EC994D7C693E3141C4563 /* core.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = core.swift; sourceTree = "<group>"; };
 		642CF26F4B57B0FF7348C6BF /* SharedTypes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SharedTypes; path = ../shared_types/generated/swift/SharedTypes; sourceTree = SOURCE_ROOT; };
-		833C393AD96B130BF330828C /* FeedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailView.swift; sourceTree = "<group>"; };
 		842F8D01CC76E9BFCDBD2862 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		8B8EC4C63F3ECC2B26BBAEC2 /* shared.udl */ = {isa = PBXFileReference; path = shared.udl; sourceTree = "<group>"; };
+		8B8EC4C63F3ECC2B26BBAEC2 /* shared.udl */ = {isa = PBXFileReference; lastKnownFileType = text; path = shared.udl; sourceTree = "<group>"; };
 		8EA6E09EE87596B896068D0E /* Shared */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Shared; path = ../shared/shared.xcodeproj; sourceTree = "<group>"; };
-		BCE372A480C0678AFD8770A5 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		CF5BE0317D54587DCCF48AF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C26A1E5DDAB1ED32518E8F2A /* libshared_static.a.a in Frameworks */,
+				C26A1E5DDAB1ED32518E8F2A /* libshared_static.a in Frameworks */,
 				1989BD3C863A9FB37C889B6D /* SharedTypes in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,8 +106,8 @@
 		64DA90BC973EE8B5939308C2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E75E53B837C6A0E03FDCEC5A,
-				2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a.a */,
+				2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a */,
+				E75E53B837C6A0E03FDCEC5A /* uniffi-bindgen */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,10 +150,7 @@
 			children = (
 				842F8D01CC76E9BFCDBD2862 /* ContentView.swift */,
 				258EC994D7C693E3141C4563 /* core.swift */,
-				833C393AD96B130BF330828C /* FeedDetailView.swift */,
 				CF5BE0317D54587DCCF48AF4 /* Info.plist */,
-				BCE372A480C0678AFD8770A5 /* LibraryView.swift */,
-				19A65A9320F7A3AF3A5F129A /* SettingsView.swift */,
 				02DCFFA8F642585B6E57DA81 /* SimpleCounterApp.swift */,
 			);
 			path = SimpleCounter;
@@ -197,8 +190,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 2D6F50C7605F083A24BC32D1 /* Build configuration list for PBXProject "SimpleCounter" */;
 			developmentRegion = en;
@@ -229,15 +220,17 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a.a */ = {
+		2EA4D4AAE1A6C4D3400A9A06 /* libshared_static.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libshared_static.a.a;
+			path = libshared_static.a;
 			remoteRef = 6EC78E6AA13637C891278065 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E75E53B837C6A0E03FDCEC5A = {
+		E75E53B837C6A0E03FDCEC5A /* uniffi-bindgen */ = {
 			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "uniffi-bindgen";
 			remoteRef = EC190C8522C4065CF4E41954 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -248,7 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AD69AC61D674BB2BC300FC2 /* (null) in Resources */,
+				2AD69AC61D674BB2BC300FC2 /* uniffi-bindgen in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,9 +253,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				401EA3CBD0D2AD8D475C10AF /* ContentView.swift in Sources */,
-				E5AA5D3248AF0DD08781EE06 /* FeedDetailView.swift in Sources */,
-				68352D64F57E58C922A0B6BD /* LibraryView.swift in Sources */,
-				D58188307218BFA136B4D659 /* SettingsView.swift in Sources */,
 				ACEED4C684566162EAB9CB48 /* SimpleCounterApp.swift in Sources */,
 				94DCD6C97BBC86B89673CA0E /* core.swift in Sources */,
 				A022BC4B1B16254762ED55B3 /* shared.udl in Sources */,
@@ -292,7 +282,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = SimpleCounter/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -303,6 +293,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.simple_counter.SimpleCounter;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = generated/sharedFFI.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -315,7 +308,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = SimpleCounter/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -326,6 +319,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.simple_counter.SimpleCounter;
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = generated/sharedFFI.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
