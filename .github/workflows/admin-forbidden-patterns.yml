@@ -16,38 +16,33 @@ jobs:
         with:
           # Regex patterns (one per line)
           patterns: |
-            # --- Debugging leftovers
-            console\.log\(
-            debugger
-            # --- Lint/TypeScript escape hatches
-            @ts-ignore
-            @ts-nocheck
-            eslint-disable(-next-line)?
-            # --- Debugging leftovers (Python)
-            breakpoint\(
-            pdb\.set_trace\(
-            ipdb\.set_trace\(
-            # --- Python escape hatches
-            type:[[:space:]]*ignore
-            pyright:[[:space:]]*ignore
-            noqa
-            pylint:[[:space:]]*disable
+            # --- Rust: lint/warning suppressions ---
+            \#\[allow\(
+            \#!\[allow\(
+            # --- Rust: unsafe code ---
+            unsafe\s*\{
+            unsafe\s+fn
+            unsafe\s+impl
+            unsafe\s+trait
+            # --- Rust: force unwrap/expect with empty message ---
+            \.unwrap\(\)
+            \.expect\(\s*""\s*\)
+            # --- Swift: lint suppressions ---
+            swiftlint:disable(?!:next)
+            # --- Swift: force try / force cast / force unwrap ---
+            try!
+            as!
+            \w!\s*$
           default_patterns: true
           mode: regex
           ignore_case: true
           include: |
-            **/*.cjs
-            **/*.js
-            **/*.json
-            **/*.jsx
-            **/*.md
-            **/*.mjs
-            **/*.py
+            **/*.rs
+            **/*.swift
             **/*.toml
-            **/*.ts
-            **/*.tsx
-            **/*.yaml
             **/*.yml
+            **/*.yaml
+            **/*.md
           # Common exclusions to reduce noise
           exclude: |
             .git/**/*
@@ -59,3 +54,4 @@ jobs:
             **/__pycache__/**/*
             **/package-lock.json
             **/uv.lock
+            **/Cargo.lock
