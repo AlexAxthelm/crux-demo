@@ -28,7 +28,7 @@ jobs:
             \.unwrap\(\)
             \.expect\(\s*""\s*\)
             # --- Swift: lint suppressions ---
-            swiftlint:disable(?!:next)
+            swiftlint:disable
             # --- Swift: force try / force cast / force unwrap ---
             try!
             as!
