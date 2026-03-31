@@ -1,31 +1,10 @@
 use crux_core::{
     macros::effect,
-    render::{self, RenderOperation},
+    render::{render, RenderOperation},
     App, Command,
 };
+use facet::Facet;
 use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub enum Event {
-    Increment,
-    Decrement,
-    Reset,
-}
-
-#[effect(typegen)]
-pub enum Effect {
-    Render(RenderOperation),
-}
-
-#[derive(Default)]
-pub struct Model {
-    count: isize,
-}
-
-#[derive(Serialize, Deserialize, Clone, Default)]
-pub struct ViewModel {
-    pub count: String,
-}
 
 #[derive(Default)]
 pub struct Counter;
@@ -42,12 +21,125 @@ impl App for Counter {
             Event::Decrement => model.count -= 1,
             Event::Reset => model.count = 0,
         }
-        render::render()
+
+        render()
     }
 
-    fn view(&self, model: &Self::Model) -> Self::ViewModel {
+    fn view(&self, model: &Model) -> ViewModel {
         ViewModel {
             count: format!("Count is: {}", model.count),
         }
     }
 }
+
+#[derive(Facet, Serialize, Deserialize, Clone, Debug)]
+#[repr(C)]
+pub enum Event {
+    Increment,
+    Decrement,
+    Reset,
+}
+
+#[derive(Default)]
+pub struct Model {
+    count: isize,
+}
+
+#[derive(Facet, Serialize, Deserialize, Clone, Default)]
+pub struct ViewModel {
+    pub count: String,
+}
+
+#[effect(facet_typegen)]
+#[derive(Debug)]
+pub enum Effect {
+    Render(RenderOperation),
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn renders() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let mut cmd = app.update(Event::Reset, &mut model);
+
+        // Check update asked us to `Render`
+        cmd.expect_one_effect().expect_render();
+    }
+
+    #[test]
+    fn shows_initial_count() {
+        let app = Counter;
+        let model = Model::default();
+
+        let actual_view = app.view(&model).count;
+        let expected_view = "Count is: 0";
+        assert_eq!(actual_view, expected_view);
+    }
+
+    #[test]
+    fn increments_count() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let mut cmd = app.update(Event::Increment, &mut model);
+
+        // Check update asked us to `Render`
+        cmd.expect_one_effect().expect_render();
+
+        let actual_view = app.view(&model).count;
+        let expected_view = "Count is: 1";
+        assert_eq!(actual_view, expected_view);
+    }
+
+    #[test]
+    fn decrements_count() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let mut cmd = app.update(Event::Decrement, &mut model);
+
+        // Check update asked us to `Render`
+        cmd.expect_one_effect().expect_render();
+
+        let actual_view = app.view(&model).count;
+        let expected_view = "Count is: -1";
+        assert_eq!(actual_view, expected_view);
+    }
+
+    #[test]
+    fn resets_count() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let _ = app.update(Event::Increment, &mut model);
+        let _ = app.update(Event::Reset, &mut model);
+
+        // Was the view updated correctly?
+        let actual = app.view(&model).count;
+        let expected = "Count is: 0";
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn counts_up_and_down() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let _ = app.update(Event::Increment, &mut model);
+        let _ = app.update(Event::Reset, &mut model);
+        let _ = app.update(Event::Decrement, &mut model);
+        let _ = app.update(Event::Increment, &mut model);
+        let _ = app.update(Event::Increment, &mut model);
+
+        // Was the view updated correctly?
+        let actual = app.view(&model).count;
+        let expected = "Count is: 1";
+        assert_eq!(actual, expected);
+    }
+}
+// ANCHOR_END: test

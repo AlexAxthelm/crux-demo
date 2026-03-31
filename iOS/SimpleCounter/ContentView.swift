@@ -1,4 +1,4 @@
-import SharedTypes
+import App
 import SwiftUI
 
 struct ContentView: View {
@@ -50,8 +50,7 @@ struct ActionButton: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(core: Core())
-    }
+#Preview {
+    ContentView(core: Core())
 }
+
