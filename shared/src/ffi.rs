@@ -1,6 +1,6 @@
 use crux_core::{
-    Core,
     bridge::{Bridge, EffectId},
+    Core,
 };
 
 use crate::Counter;
@@ -72,4 +72,3 @@ impl CoreFFI {
         }
     }
 }
-
