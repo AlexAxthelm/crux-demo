@@ -30,12 +30,6 @@ struct ActionButton: View {
     var color: Color
     var action: () -> Void
 
-    init(label: String, color: Color, action: @escaping () -> Void) {
-        self.label = label
-        self.color = color
-        self.action = action
-    }
-
     var body: some View {
         Button(action: action) {
             Text(label)
@@ -53,4 +47,3 @@ struct ActionButton: View {
 #Preview {
     ContentView(core: Core())
 }
-
