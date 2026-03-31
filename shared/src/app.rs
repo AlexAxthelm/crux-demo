@@ -3,6 +3,7 @@ use crux_core::{
     render::{render, RenderOperation},
     App, Command,
 };
+use facet::Facet;
 use serde::{Deserialize, Serialize};
 
 #[derive(Default)]
@@ -31,7 +32,8 @@ impl App for Counter {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Facet, Serialize, Deserialize, Clone, Debug)]
+#[repr(C)]
 pub enum Event {
     Increment,
     Decrement,
@@ -43,12 +45,12 @@ pub struct Model {
     count: isize,
 }
 
-#[derive(Serialize, Deserialize, Clone, Default)]
+#[derive(Facet, Serialize, Deserialize, Clone, Default)]
 pub struct ViewModel {
     pub count: String,
 }
 
-#[effect(typegen)]
+#[effect(facet_typegen)]
 #[derive(Debug)]
 pub enum Effect {
     Render(RenderOperation),
@@ -140,3 +142,4 @@ mod test {
         assert_eq!(actual, expected);
     }
 }
+// ANCHOR_END: test
