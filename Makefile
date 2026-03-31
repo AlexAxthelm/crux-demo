@@ -61,13 +61,37 @@ SIM_ID := $(shell \
 		| .udid' \
 	| head -1)
 
-ios-open:
-	open $(XCODE_PROJECT)
+# Generate Swift types from the shared Rust core via the codegen binary
+typegen:
+	RUST_LOG=info cargo run \
+		--package shared \
+		--bin codegen \
+		--features codegen,facet_typegen \
+		-- \
+			--language swift \
+			--output-dir iOS/generated
 
-xcodegen:
+# Build the shared library as a Swift package using cargo-swift (requires v0.9.0)
+package:
+	cd shared && \
+		cargo swift --version | grep -q '0.9.0' && \
+		cargo swift package \
+			--name Shared \
+			--platforms ios \
+			--lib-type static \
+			--features uniffi && \
+		rm -rf generated && \
+		mkdir -p ../iOS/generated/Shared && \
+		cp -r Shared/* ../iOS/generated/Shared/ && \
+		rm -rf Shared
+
+# Rebuild the Xcode project from project.yml
+generate-project:
 	xcodegen --spec iOS/project.yml --project iOS
 
-ios-build: rust-build xcodegen
+ios-build: typegen package generate-project
+
+ios-xcodebuild: ios-build
 	xcodebuild \
 		-project $(XCODE_PROJECT) \
 		-scheme $(XCODE_SCHEME) \
@@ -75,7 +99,13 @@ ios-build: rust-build xcodegen
 		-destination 'platform=iOS Simulator,id=$(SIM_ID)' \
 		| xcpretty
 
-ios-sim: ios-build
+# Full rebuild from scratch
+ios-rebuild: ios-clean ios-build
+
+ios-dev: ios-build
+	xed iOS
+
+ios-sim: ios-xcodebuild
 	$(eval APP_PATH := $(shell find ~/Library/Developer/Xcode/DerivedData \
 		-name "$(XCODE_SCHEME).app" \
 		-path "*/Debug-iphonesimulator/*" \
@@ -98,11 +128,18 @@ swift-clean: xcode-clean swift-generated-clean
 xcode-clean:
 	rm -rf $(XCODE_PROJECT)
 
+ios-clean: xcode-clean swift-generated-clean
+
 swift-generated-clean:
 	rm -rf iOS/generated
-	rm -rf shared_types/generated/swift
 
-.PHONY: check test lint format format-check \
-        rust-check rust-test rust-lint rust-format rust-format-check rust-build \
-        swift-lint swift-format swift-format-check \
-        ios-open xcodegen ios-build ios-sim
+# Wipe generated Swift types and regenerate
+regenerate: swift-generated-clean typegen
+
+.PHONY: check test lint format format-check clean \
+        rust-all-checks rust-check rust-test rust-lint \
+        rust-format rust-format-check rust-lock-check rust-build rust-clean \
+        swift-all-checks swift-lint swift-format swift-format-check \
+        typegen package generate-project \
+        ios-build ios-xcodebuild ios-rebuild ios-dev ios-sim ios-clean \
+        swift-clean xcode-clean swift-generated-clean regenerate
