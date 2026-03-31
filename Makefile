@@ -81,6 +81,7 @@ package:
 			--lib-type static \
 			--features uniffi && \
 		rm -rf generated && \
+		rm -rf ../iOS/generated/Shared && \
 		mkdir -p ../iOS/generated/Shared && \
 		cp -r Shared/* ../iOS/generated/Shared/ && \
 		rm -rf Shared
