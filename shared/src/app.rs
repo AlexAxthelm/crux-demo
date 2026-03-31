@@ -53,3 +53,90 @@ pub struct ViewModel {
 pub enum Effect {
     Render(RenderOperation),
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn renders() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let mut cmd = app.update(Event::Reset, &mut model);
+
+        // Check update asked us to `Render`
+        cmd.expect_one_effect().expect_render();
+    }
+
+    #[test]
+    fn shows_initial_count() {
+        let app = Counter;
+        let model = Model::default();
+
+        let actual_view = app.view(&model).count;
+        let expected_view = "Count is: 0";
+        assert_eq!(actual_view, expected_view);
+    }
+
+    #[test]
+    fn increments_count() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let mut cmd = app.update(Event::Increment, &mut model);
+
+        // Check update asked us to `Render`
+        cmd.expect_one_effect().expect_render();
+
+        let actual_view = app.view(&model).count;
+        let expected_view = "Count is: 1";
+        assert_eq!(actual_view, expected_view);
+    }
+
+    #[test]
+    fn decrements_count() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let mut cmd = app.update(Event::Decrement, &mut model);
+
+        // Check update asked us to `Render`
+        cmd.expect_one_effect().expect_render();
+
+        let actual_view = app.view(&model).count;
+        let expected_view = "Count is: -1";
+        assert_eq!(actual_view, expected_view);
+    }
+
+    #[test]
+    fn resets_count() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let _ = app.update(Event::Increment, &mut model);
+        let _ = app.update(Event::Reset, &mut model);
+
+        // Was the view updated correctly?
+        let actual = app.view(&model).count;
+        let expected = "Count is: 0";
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn counts_up_and_down() {
+        let app = Counter;
+        let mut model = Model::default();
+
+        let _ = app.update(Event::Increment, &mut model);
+        let _ = app.update(Event::Reset, &mut model);
+        let _ = app.update(Event::Decrement, &mut model);
+        let _ = app.update(Event::Increment, &mut model);
+        let _ = app.update(Event::Increment, &mut model);
+
+        // Was the view updated correctly?
+        let actual = app.view(&model).count;
+        let expected = "Count is: 1";
+        assert_eq!(actual, expected);
+    }
+}
