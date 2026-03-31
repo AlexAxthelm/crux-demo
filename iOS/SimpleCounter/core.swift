@@ -1,26 +1,24 @@
+// apple/CounterApp/core.swift
+import App
 import Foundation
-import SharedTypes
+import Shared
 
 @MainActor
 class Core: ObservableObject {
     @Published var view: ViewModel
 
+    private var core: CoreFfi
+
     init() {
-        guard let viewBytes = try? ViewModel.bincodeDeserialize(input: [UInt8](SimpleCounter.view())) else {
-            fatalError("Failed to deserialize initial ViewModel from core")
-        }
-        view = viewBytes
+        self.core = CoreFfi()
+        self.view = try! .bincodeDeserialize(input: [UInt8](core.view()))
     }
 
     func update(_ event: Event) {
-        guard let serialized = try? event.bincodeSerialize() else {
-            fatalError("Failed to serialize Event: \(event)")
-        }
-        let effects = [UInt8](processEvent(Data(serialized)))
+        // swiftlint:disable:next force_try
+        let effects = [UInt8](core.update(data: Data(try! event.bincodeSerialize())))
 
-        guard let requests: [Request] = try? .bincodeDeserialize(input: effects) else {
-            fatalError("Failed to deserialize requests from core effects")
-        }
+        let requests: [Request] = try! .bincodeDeserialize(input: effects)
         for request in requests {
             processEffect(request)
         }
@@ -29,10 +27,10 @@ class Core: ObservableObject {
     func processEffect(_ request: Request) {
         switch request.effect {
         case .render:
-            guard let updatedView = try? ViewModel.bincodeDeserialize(input: [UInt8](SimpleCounter.view())) else {
-                fatalError("Failed to deserialize ViewModel during render")
+            DispatchQueue.main.async {
+                self.view = try! .bincodeDeserialize(input: [UInt8](self.core.view()))
             }
-            view = updatedView
         }
     }
 }
+
